@@ -1,7 +1,43 @@
 <WindowManager>:
+    HomeWindow:
     GameWindow:
     HighscoreWindow:
 
+<HomeWindow>:
+    name: "homeWindow"
+
+    BoxLayout
+        orientation: "vertical"
+        spacing: 30
+        padding: [30,50,30,50]
+
+        Image:
+            source: "icon.png"
+            size: self.texture_size
+
+        Label:
+            text: "Memóriajáték"
+            font_size: 24
+
+        Button:
+            text: "Játék"
+            font_size: 18
+            background_normal: ''
+            background_color: (0.1, 0.5, 0.8, 1)
+            on_press:root.manager.current = "gameWindow"
+        Button:
+            text: "Ranglista"
+            font_size: 18
+            background_normal: ''
+            background_color: (0.81, 0.49, 0.1, 1)
+            on_press:root.manager.current = "highscoreWindow"
+
+        Button:
+            text: "Kilépés"
+            font_size: 18
+            background_normal: ''
+            background_color: (0.8, 0.2, 0.2, 1)
+            on_press: root.exit()
 
 <GameWindow>:
     name: "gameWindow"

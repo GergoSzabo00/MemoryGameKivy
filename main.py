@@ -6,6 +6,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 kv = Builder.load_file('screen_manager.kv')
 
 
+class HomeWindow(Screen):
+    def exit(self):
+        App.get_running_app().stop()
+
+
 class GameWindow(Screen):
     pass
 
