@@ -82,5 +82,5 @@ Opciók:
   * <a href="https://www.flaticon.com/free-icon/kiwi_1135602" target="_blank">Kiwi</a>
   * <a href="https://www.flaticon.com/free-icon/watermelon_1135553" target="_blank">Dinnye</a>
 
-## Játék logika alapja:
+## Játék logikai alapja:
 https://github.com/niavlys/memoryKivy
