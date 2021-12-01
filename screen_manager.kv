@@ -61,5 +61,46 @@
             size_hint:(0.2,0.2)
             on_press: root.manager.current="homeWindow"
 
+<CustomViewClass>
+    size_hint_y: None
+    Label:
+        text: root.name
+        size_hint_y: None
+        height: self.texture_size[1]
+    Label:
+        text: root.time
+        size_hint_y: None
+        height: self.texture_size[1]
+
 <HighscoreWindow>:
     name: "highscoreWindow"
+    BoxLayout:
+        orientation: "vertical"
+        padding: [5, 5, 5, 5]
+        spacing: 10
+
+        BoxLayout:
+            orientation: "vertical"
+            GridLayout:
+                size_hint: 1, None
+                size_hint_y: None
+                height: 25
+                cols:2
+
+                Label:
+                    text: "Név"
+                Label:
+                    text: "Idő (óra:perc:másodperc)"
+            RV:
+                viewclass: 'CustomViewClass'
+                data: [{'name': str(x["name"]), 'time': str(x["time"])} for x in root.data_items]
+                RecycleBoxLayout:
+                    default_size: None, dp(40)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+        Button:
+            text: "Vissza"
+            size_hint: (0.4, 0.2)
+            on_press: root.manager.current="homeWindow"

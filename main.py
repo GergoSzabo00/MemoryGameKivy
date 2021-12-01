@@ -5,10 +5,15 @@ import mysql.connector
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.properties import StringProperty, ObjectProperty
+from kivy.properties import StringProperty, ObjectProperty, ListProperty, BooleanProperty
+from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
+from kivy.uix.recyclegridlayout import RecycleGridLayout
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
@@ -231,8 +236,75 @@ class GameWindow(Screen):
         tile_container.children[0].reset_clock()
         tile_container.clear_widgets()
 
+
+class RV(RecycleView):
+    def __init__(self, **kwargs):
+        super(RV, self).__init__(**kwargs)
+
+
+class CustomViewClass(BoxLayout):
+    name = StringProperty('')
+    time = StringProperty('')
+
+
 class HighscoreWindow(Screen):
-    pass
+    data_items = ListProperty([])
+
+    def get_scores(self):
+        try:
+            db = mysql.connector.connect(
+                    host="127.0.0.1",
+                    user="root",
+                    password="",
+                    database="memorygamedb"
+                )
+            cursor = db.cursor()
+
+            select_statement = """
+                    SELECT name, time FROM highscore ORDER BY time ASC
+                """
+
+            cursor.execute(select_statement)
+
+            rows = cursor.fetchall()
+
+            for row in rows:
+                self.data_items.append({'name': row[0], 'time': row[1]})
+
+        except mysql.connector.Error:
+            self.show_error_popup("Hiba történt a csatlakozás során!")
+
+    def show_error_popup(self, text):
+        box = BoxLayout()
+        box.orientation = "vertical"
+
+        label = Label()
+        label.text = text
+        label.color = (0.78, 0.13, 0.21, 1)
+
+        box.add_widget(label)
+
+        ok_button = Button()
+        ok_button.text = "Ok"
+        ok_button.background_normal = ""
+        ok_button.background_color = (0.1, 0.5, 0.8, 1)
+        ok_button.size_hint = (1, 0.4)
+        ok_button.on_press = lambda *args: self.dismiss_popup(popup, *args)
+
+        box.add_widget(ok_button)
+
+        popup = Popup(title="Hiba", content=box, auto_dismiss=False)
+        popup.open()
+
+    def dismiss_popup(self, popup: Popup):
+        popup.dismiss()
+        self.parent.current = "homeWindow"
+
+    def on_pre_enter(self, *args):
+        self.get_scores()
+
+    def on_leave(self, *args):
+        self.data_items.clear()
 
 
 class WindowManager(ScreenManager):
