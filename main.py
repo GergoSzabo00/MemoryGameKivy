@@ -58,6 +58,7 @@ class GameWindow(Screen):
 
                         if self.parent.itemsLeft == len(self.parent.items) / 2:
                             #megtaláltuk az összes párt, azaz nyertünk
+                            Clock.unschedule(self.parent.clock_callback)
                             self.parent.show_game_over_popup()
 
                     else:
